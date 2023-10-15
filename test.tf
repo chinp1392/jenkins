@@ -1,27 +1,27 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
-      version = "4.52.0"
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
     }
   }
 }
-
-terraform {
-  required_version = ">=0.13"
-}
-
-
 provider "aws" {
   region     = "us-east-1"
+
+}
+resource "aws_instance" "myec2" {
+   ami = "ami-067d1e60475437da2"
+   instance_type = var.instance_size
+   security_groups = [ ]
+   key_name = "main"
+
+   tags = {
+    name = "Terraform"
+ }
+
 }
 
-resource "aws_instance" "myec2" {
-   ami = "ami-09988af04120b3591"
-   instance_type = "t2.micro"
-   key_name = "Ansible"
-   tags = {
-      Name = "Example"
-   }
-
+output "myec2ip" {
+value = aws_instance.myec2.public_ip
 }
